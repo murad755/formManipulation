@@ -1,32 +1,77 @@
 /// <reference types="cypress" />
 
+import FormPage, { formSelectors } from '../../support/PageObjects/form'
+
 describe('example to-do app', () => {
     beforeEach(() => {
-
+        const formPage = new FormPage()
+        formPage.visit()
     })
 
-    it.skip('Trigger alert', () => {
-        cy.visit('/')
+    it('Check dropdown', () => {
+        const formPage = new FormPage()
 
-        cy.task('readfile', 'cypress/fixtures/alert-text.txt').then((textOrNull) => {
-            textOrNull && alert(textOrNull)
-        })
+        formPage.selectOptionFromDropDown(
+            formSelectors.dropDown,
+            'Option2',
+            'option2'
+        )
+    })
+
+    it('Upload image', () => {
+        const formPage = new FormPage()
+
+        // select file upload and upload file
+        formPage.uploadFile(formSelectors.fileUpload, 'cat.jpeg')
+    })
+
+    it('Open new tab', () => {
+        const formPage = new FormPage()
+
+        formPage.openNewTab(formSelectors.openTab)
+    })
+
+    it('Invoke alert and confirmation modals', () => {
+        const formPage = new FormPage()
+
+        formPage.invokeAlertAndConfirmationModals(
+            'Murad',
+            formSelectors.nameInput,
+            formSelectors.alertButton,
+            formSelectors.confirmButton
+        )
+    })
+
+    it('Hide and show textbox', () => {
+        const formPage = new FormPage()
+
+        formPage.hideAndShowTextbox(
+            formSelectors.hideTextbox,
+            formSelectors.showTextbox,
+            formSelectors.displayedText
+        )
+    })
+
+    it('Mouse hover', () => {
+        const formPage = new FormPage()
+
+        formPage.mouseHover(
+            formSelectors.mouseHover,
+            formSelectors.hoverContent
+        )
+    })
+
+    it('Iframe verification', () => {
+        const formPage = new FormPage()
+
+        formPage.getIframeBody(formSelectors.iframe)
     })
 
     it('Trigger alert', () => {
-        cy.intercept('POST', 'https://api-iam.intercom.io/messenger/web/ping').as('loading')
-        cy.visit('/')
-        cy.wait('@loading')
-
-
-        cy.get('#dropdown-class-example').should('exist').and('be.visible')
-        //click dropdown
-        cy.get('#dropdown-class-example').select('Option2')
-        // verify option 2 is selected
-        cy.get('#dropdown-class-example').should('have.value', 'option2')
-
-        // select file upload and upload file
-        cy.get('.image-upload-wrapper > input').attachFile('alert-text.txt')
-
+        cy.task('readfile', 'cypress/fixtures/alert-text.txt').then(
+            (textOrNull) => {
+                textOrNull && alert(textOrNull)
+            }
+        )
     })
 })
